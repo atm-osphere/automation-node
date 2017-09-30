@@ -4,9 +4,9 @@ import { guid } from "@atomist/automation-client/internal/util/string";
 
 export class StartUpListener extends AutomationEventListenerSupport {
 
-    constructor(private administrator: string,
+    constructor(private teamId: string, private administrator: string,
         private name: string, private version: string) {
-        super()
+        super();
     }
 
     public registrationSuccessful(transport: TransportEventHandler) {
@@ -16,7 +16,7 @@ export class StartUpListener extends AutomationEventListenerSupport {
         transport.onCommand({
             name: "SendStartupMessage",
             atomist_type: "command_handler_request",
-            correlation_context: { team: { id: "T1L0VDKJP" } },
+            correlation_context: { team: { id: this.teamId } },
             corrid: guid(),
             parameters: [{
                 name: "administrator",
@@ -30,7 +30,7 @@ export class StartUpListener extends AutomationEventListenerSupport {
             }],
             mapped_parameters: [],
             secrets: [],
-            team: { id: "T1L0VDKJP" },
+            team: { id: this.teamId },
             rug: {},
         });
     }

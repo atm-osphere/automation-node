@@ -14,16 +14,16 @@ import { SendStartupMessage } from "./commands/SendStartupMessage";
 
 const pj = require(`${appRoot}//package.json`);
 
-const token = process.env["GITHUB_TOKEN"];
+const token = process.env.GITHUB_TOKEN;
 
 const whoami = {
     name: "action-board",
     version: "0.2.4",
-}
+    teamId: config.get("teamId"),
+};
 
 export const configuration: Configuration = {
     ...whoami,
-    teamId: "T6MFSUPDL",
     commands: [
         // action board
         () => new ActionBoard(),
@@ -55,7 +55,7 @@ export const configuration: Configuration = {
         },
     },
     listeners: [
-        new StartUpListener("jessitron", whoami.name, whoami.version),
+        new StartUpListener(whoami.teamId, "jessitron", whoami.name, whoami.version),
     ],
     endpoints: {
         graphql: config.get("endpoints.graphql"),
