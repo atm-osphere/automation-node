@@ -9,14 +9,20 @@ import { Unassign } from "./action-board/Unassign";
 import { CloseIssue } from "./action-board/Complete";
 import { NewAutomation } from "./commands/generator/NewAutomation";
 import { HelloIngestor } from "./events/HelloIngestor";
+import { StartUpListener } from "./startup";
+import { SendStartupMessage } from "./commands/SendStartupMessage";
 
 const pj = require(`${appRoot}//package.json`);
 
 const token = process.env["GITHUB_TOKEN"];
 
-export const configuration: Configuration = {
+const whoami = {
     name: "action-board",
     version: "0.2.4",
+}
+
+export const configuration: Configuration = {
+    ...whoami,
     teamId: "T6MFSUPDL",
     commands: [
         // action board
@@ -28,6 +34,7 @@ export const configuration: Configuration = {
         () => new Unassign(),
         // useful from sample
         () => new NewAutomation(),
+        () => new SendStartupMessage(),
     ],
     events: [
         () => new UpdateActionBoardsOnIssue(),
@@ -47,6 +54,9 @@ export const configuration: Configuration = {
             },
         },
     },
+    listeners: [
+        new StartUpListener("jessitron", whoami.name, whoami.version),
+    ],
     endpoints: {
         graphql: config.get("endpoints.graphql"),
         api: config.get("endpoints.api"),
