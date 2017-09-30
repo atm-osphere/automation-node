@@ -1,4 +1,5 @@
 import * as appRoot from "app-root-path";
+import * as config from "config";
 import { Configuration } from "@atomist/automation-client/configuration";
 import { guid } from "@atomist/automation-client/internal/util/string";
 import { ActionBoard, CommenceWork, ActionBoardUpdate, PostponeWork } from "./action-board/ActionBoard";
@@ -45,5 +46,9 @@ export const configuration: Configuration = {
                 enabled: false,
             },
         },
+    },
+    endpoints: {
+        graphql: config.get("endpoints.graphql"),
+        api: config.get("endpoints.api"),
     },
 };
