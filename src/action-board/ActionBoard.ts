@@ -213,12 +213,13 @@ export function doWazzup(ctx: HandlerContext,
 
                 console.log("did find the linked repos");
                 const activities: Activity[] = result.items.map(i => {
+                    const p = priority(linkedRepositories, i);
                     return {
                         identifier: i.url,
-                        priority: priority(linkedRepositories, i),
+                        priority: p,
                         recency: normalizeTimestamp(i.updated_at),
                         current: hasLabel(i, inProgressLabelName),
-                        appearance: renderIssue(i)
+                        appearance: renderIssue(i, p)
                     }
                 });
 
@@ -381,7 +382,7 @@ function priority(linkedRepositories: Repository[], issue: GitHubIssueResult): n
 
 
 
-function renderIssue(issue: GitHubIssueResult): slack.Attachment {
+function renderIssue(issue: GitHubIssueResult, priority: number): slack.Attachment {
 
     const issueTitle = `#${issue.number}: ${issue.title}`;
     const labels = issue.labels.map((label) => toEmoji(label.name)).join(" ");
@@ -391,7 +392,7 @@ function renderIssue(issue: GitHubIssueResult): slack.Attachment {
     const attachment: slack.Attachment = {
         fallback: slack.escape(issueTitle),
         title,
-        footer: `${slack.url(issue.html_url, repository.owner + "/" + repository.name)}`,
+        footer: `${slack.url(issue.html_url, repository.owner + "/" + repository.name)} priority ${priority}`,
         ts: normalizeTimestamp(issue.updated_at),
         author_name: `by @${issue.user.login} ${timeSince(issue.created_at)}`, // todo: translate to slack?
         author_icon: issue.user.avatar_url,
