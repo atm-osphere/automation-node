@@ -13,10 +13,14 @@ import {
 } from "@atomist/automation-client/Handlers";
 import { logger } from "@atomist/automation-client/internal/util/logger";
 import * as slack from "@atomist/slack-messages/SlackMessages";
-import { findLinkedRepositories, isWorkday, repositoryFromIssue, Repository, toEmoji, normalizeTimestamp, timeSince, inProgressLabelName } from "./helpers";
+import {
+    findLinkedRepositories, isWorkday, repositoryFromIssue,
+    Repository, toEmoji, normalizeTimestamp, timeSince, inProgressLabelName
+} from "./helpers";
 import { whereAmIRunning } from './Provenance';
 import { GitHubIssueResult, hasLabel, GitHubIssueSearchResult } from './GitHubApiTypes';
-import { MessageOptions, buttonForCommand, MessageClient } from '@atomist/automation-client/spi/message/MessageClient';
+import { MessageOptions, buttonForCommand, MessageClient } from
+    '@atomist/automation-client/spi/message/MessageClient';
 import { globalActionBoardTracker, ActionBoardSpecifier, ActionBoardActivity } from './globalState';
 import { Unassign } from './Unassign';
 import { CloseIssue } from './Complete';
@@ -344,7 +348,7 @@ function priority(linkedRepositories: Repository[], issue: GitHubIssueResult): n
 
     if (linkedRepositories.some(linked => repository.name === linked.name && repository.owner === linked.owner)) {
         // relevant to channel
-        opinion += 10;
+        opinion += 20;
     }
 
     // work
@@ -358,9 +362,9 @@ function priority(linkedRepositories: Repository[], issue: GitHubIssueResult): n
     // work+personal both
     if (repository.name === "elm-rugs" && repository.owner === "satellite-of-love" && issue.user.login !== "jessitron") {
         if (atWork) {
-            opinion += 9; // I really care about other people creating issues here
+            opinion += 3; // I really care about other people creating issues here
         } else {
-            opinion += 15; // especially on weekends
+            opinion += 5; // especially on weekends
         }
     }
     if (hasLabel(issue, "fun") && !atWork) {

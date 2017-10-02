@@ -19,7 +19,7 @@ const token = process.env.GITHUB_TOKEN;
 const whoami = {
     name: "action-board",
     version: "0.2.4",
-    teamId: config.get("teamId"),
+    teamId: "T7BPVSAR3",
 };
 
 export const configuration: Configuration = {
@@ -33,7 +33,6 @@ export const configuration: Configuration = {
         () => new CloseIssue(),
         () => new Unassign(),
         // useful from sample
-        () => new NewAutomation(),
         () => new SendStartupMessage(),
     ],
     events: [
@@ -57,8 +56,4 @@ export const configuration: Configuration = {
     listeners: [
         new StartUpListener(whoami.teamId, "jessitron", whoami.name, whoami.version),
     ],
-    endpoints: {
-        graphql: config.get("endpoints.graphql"),
-        api: config.get("endpoints.api"),
-    },
 };
