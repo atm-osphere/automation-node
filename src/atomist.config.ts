@@ -7,6 +7,10 @@ import { ActionBoard, CommenceWork, ActionBoardUpdate, PostponeWork } from "./ac
 import { UpdateActionBoardsOnIssue } from "./action-board/UpdateActionBoardsOnIssue";
 import { Unassign } from "./action-board/Unassign";
 import { CloseIssue } from "./action-board/Complete";
+import { BuildLog } from "./lint-fix/BuildLog";
+import { FailedBuildLog, DistillBuildLog } from "./lint-fix/DistillFailedBuild";
+import { BuildOnTravis } from "./lint-fix/BuildOnTravis";
+import { LintEveryBranch } from "./lint-fix/LintEveryBranch";
 import { NewAutomation } from "./commands/generator/NewAutomation";
 import { HelloIngestor } from "./events/HelloIngestor";
 import { StartUpListener } from "./startup";
@@ -25,19 +29,17 @@ const whoami = {
 export const configuration: Configuration = {
     ...whoami,
     commands: [
-        // action board
-        () => new ActionBoard(),
-        () => new ActionBoardUpdate(),
-        () => new CommenceWork(),
-        () => new PostponeWork(),
-        () => new CloseIssue(),
-        () => new Unassign(),
-        // useful from sample
+        // build
+        () => new BuildLog(),
+        () => new BuildOnTravis(),
+        () => new DistillBuildLog(),
         () => new NewAutomation(),
         () => new SendStartupMessage(),
     ],
     events: [
-        () => new UpdateActionBoardsOnIssue(),
+        //  () => new UpdateActionBoardsOnIssue(),
+        () => new FailedBuildLog(),
+        () => new LintEveryBranch(),
     ],
     ingestors: [
         () => new HelloIngestor(),
